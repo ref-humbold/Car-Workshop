@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-from gi import require_version
+import gi
 
-require_version("Gtk", "3.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
 from psycopg2 import connect
 from re import match
-from .sprzedawca import Sprzedawca
-from .mechanik import Mechanik
-from .magazynier import Magazynier
+from .seller import Seller
+from .mechanic import Mechanic
+from .warehouse import Warehouse
 from .popup import PopUp
 
 
@@ -52,12 +52,12 @@ class Login:
         user_password = self.__login_entry_2b.get_text()
 
         if match(r"^[A-Za-z]*$", user_login) is None \
-           or match(r"^[A-Za-z0-9]*$", user_password) is None:
+                or match(r"^[A-Za-z0-9]*$", user_password) is None:
             self.open_error_window("NIEPOPRAWNY LOGIN LUB HASŁO.\nSPRÓBUJ PONOWNIE.")
 
         try:
             conn = connect(database="warsztat",
-                                    user=user_login, password=user_password)
+                           user=user_login, password=user_password)
         except:
             self.open_error_window("NIEPOPRAWNY LOGIN LUB HASŁO.\nSPRÓBUJ PONOWNIE.")
             return
@@ -65,11 +65,13 @@ class Login:
             self.is_logged = True
 
         args = [user_login]
+        cur = conn.cursor()
 
         try:
-            cur = conn.cursor()
             cur.execute(
-                "SELECT r2.rolname FROM pg_roles AS r1 JOIN pg_auth_members AS m ON r1.oid = m.member JOIN pg_roles AS r2 ON m.roleid = r2.oid WHERE r1.rolname = %s;", args)
+                "SELECT r2.rolname FROM pg_roles AS r1 JOIN pg_auth_members AS m ON r1.oid = "
+                "m.member JOIN pg_roles AS r2 ON m.roleid = r2.oid WHERE r1.rolname = %s;",
+                args)
         except:
             conn.rollback()
             cur.close()
@@ -92,11 +94,11 @@ class Login:
             cur.close()
 
         if wyn == "sprzedawca":
-            worker_window = Sprzedawca(conn)
+            worker_window = Seller(conn)
         elif wyn == "mechanik":
-            worker_window = Mechanik(conn)
+            worker_window = Mechanic(conn)
         elif wyn == "magazynier":
-            worker_window = Magazynier(conn)
+            worker_window = Warehouse(conn)
         else:
             conn.close()
             self.open_error_window(

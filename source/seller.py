@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
-from gi import require_version
+import gi
 
-require_version("Gtk", "3.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
 from .clients import Clients
-from .uslugi import Uslugi
-from .zlecenia import Zlecenia
+from .commissions import Commissions
+from .orders import Orders
 
 
-class Sprzedawca:
-    """Klasa odpowiadająca za działanie okna interakcji sprzedawcy."""
-
+class Seller:
     def __init__(self, conndb):
-        """Tworzy nowe okno z połączeniem z bazą danych."""
         self.conn = conndb
 
         sprzedawca_builder = Gtk.Builder()
-        sprzedawca_builder.add_from_file("glade/sprzedawca.glade")
+        sprzedawca_builder.add_from_file("glade/seller.glade")
 
         self.__sprzedawca_window = sprzedawca_builder.get_object("sprzedawca_window")
 
@@ -36,7 +33,7 @@ class Sprzedawca:
 
     def sprzedawca_button_1_clicked_cb(self, button):
         """Reaguje na kliknięcie przycisku zarządania zleceniami."""
-        zlecenia_window = Zlecenia(self.conn)
+        zlecenia_window = Orders(self.conn)
 
     def sprzedawca_button_2_clicked_cb(self, button):
         """Reaguje na kliknięcie przycisku zarządania klientami."""
@@ -44,4 +41,4 @@ class Sprzedawca:
 
     def sprzedawca_button_3_clicked_cb(self, button):
         """Reaguje na kliknięcie przycisku zarządania usługami."""
-        uslugi_window = Uslugi(self.conn)
+        uslugi_window = Commissions(self.conn)

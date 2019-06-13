@@ -1,38 +1,38 @@
 # -*- coding: utf-8 -*-
-from gi import require_version
+import gi
 
-require_version("Gtk", "3.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
-from decimal import Decimal
+from decimal import Decimal, getcontext
 from .popup import PopUp
 
 
-class Magazynier:
-    """Klasa odpowiadająca za działanie okna interakcji magazyniera z bazą danych."""
-
+class Warehouse:
     def __init__(self, conndb):
-        """Tworzy nowe okno z połączeniem z bazą danych."""
         self.conn = conndb
 
         magazynier_builder = Gtk.Builder()
-        magazynier_builder.add_from_file("glade/magazynier.glade")
+        magazynier_builder.add_from_file("glade/warehouse.glade")
 
         self.magazynier_window = magazynier_builder.get_object("magazynier_window")
 
         self.magazynier_entry1_1b = magazynier_builder.get_object("magazynier_entry1_1b")
         self.magazynier_entry1_2b = magazynier_builder.get_object("magazynier_entry1_2b")
         self.magazynier_entry1_3b = magazynier_builder.get_object("magazynier_entry1_3b")
-        self.magazynier_comboboxtext1_4b = magazynier_builder.get_object("magazynier_comboboxtext1_4b")
+        self.magazynier_comboboxtext1_4b = magazynier_builder.get_object(
+            "magazynier_comboboxtext1_4b")
         self.magazynier_button1_5b = magazynier_builder.get_object("magazynier_button1_5b")
 
-        self.magazynier_comboboxtext2_1b = magazynier_builder.get_object("magazynier_comboboxtext2_1b")
+        self.magazynier_comboboxtext2_1b = magazynier_builder.get_object(
+            "magazynier_comboboxtext2_1b")
         self.magazynier_entry2_2b = magazynier_builder.get_object("magazynier_entry2_2b")
         self.magazynier_entry2_3b = magazynier_builder.get_object("magazynier_entry2_3b")
         self.magazynier_entry2_4b = magazynier_builder.get_object("magazynier_entry2_4b")
         self.magazynier_button2_5b = magazynier_builder.get_object("magazynier_button2_5b")
 
-        self.magazynier_comboboxtext3_1b = magazynier_builder.get_object("magazynier_comboboxtext3_1b")
+        self.magazynier_comboboxtext3_1b = magazynier_builder.get_object(
+            "magazynier_comboboxtext3_1b")
         self.magazynier_button3_1c = magazynier_builder.get_object("magazynier_button3_1c")
 
         self.__load_ids(self.magazynier_comboboxtext1_4b, "carparts")
@@ -99,11 +99,13 @@ class Magazynier:
 
         getcontext().prec = 2
         args = [firma, int(ilosc), Decimal(cena), int(cze_id)]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute(
-                "INSERT INTO zamowienia(data_zamow, firma, ilosc, cena, cze_id) VALUES(now(), %s, %s, %s, %s);", args)
+                "INSERT INTO zamowienia(data_zamow, firma, ilosc, cena, cze_id) VALUES(now(), %s, "
+                "%s, %s, %s);",
+                args)
             cur.execute("SELECT max(id) FROM zamowienia;")
             wyn = cur.fetchone()[0]
         except:
@@ -147,9 +149,9 @@ class Magazynier:
         ident = self.magazynier_comboboxtext3_1b.get_active_text()  # SQL integer
 
         args = [int(ident)]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("UPDATE TABLE zamowienia SET data_real = now() WHERE id = %s", args)
         except:
             self.conn.rollback()

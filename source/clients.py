@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
-from gi import require_version
+import gi
 
-require_version("Gtk", "3.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
-from psycopg2.extensions import AsIs
 from .popup import PopUp
 
 
 class Clients:
-    """Klasa odpowiadająca za działanie okna interakcji sprzedawcy z tabelą klientów."""
-
     def __init__(self, conndb):
-        """Tworzy nowe okno z połączeniem z bazą danych."""
         self.conn = conndb
 
         clients_builder = Gtk.Builder()
@@ -50,7 +46,6 @@ class Clients:
         self.clients_window.show()
 
     def __load_ids(self, comboboxtext):
-        """Ładuje identyfikatory (klucze główne) z tabeli klientów do zadanego pola wyboru."""
         cur = self.conn.cursor()
         cur.execute("SELECT id FROM clients;")
         idents = cur.fetchall()
@@ -63,7 +58,6 @@ class Clients:
         comboboxtext.set_active(0)
 
     def __modify(self, cur, nonstr, fieldname, args, convtype):
-        """Dokonuje modyfikacji wybranej kolumny tabeli klientów."""
         if args[0] != nonstr:
             args[0] = convtype(args[0])
 
@@ -98,10 +92,13 @@ class Clients:
         args = [None if i == "" else i for i in [imie, nazwisko, telefon, firma]] + [int(rabat)]
         args[2] = None if args[2] == None else int(args[2])
 
+        cur = self.conn.cursor()
+
         try:
-            cur = self.conn.cursor()
             cur.execute(
-                "INSERT INTO clients(imie, nazwisko, telefon, firma, rabat) VALUES (%s, %s, %s, %s, %s);", args)
+                "INSERT INTO clients(imie, nazwisko, telefon, firma, rabat) VALUES (%s, %s, %s, "
+                "%s, %s);",
+                args)
             cur.execute("SELECT max(id) FROM clients;")
             wynid = cur.fetchone()[0]
         except:
@@ -163,7 +160,8 @@ class Clients:
 
             try:
                 cur.execute(
-                    "SELECT id, imie, nazwisko, telefon, firma, rabat FROM clients WHERE id = %s;", args)
+                    "SELECT id, imie, nazwisko, telefon, firma, rabat FROM clients WHERE id = %s;",
+                    args)
                 wyn = cur.fetchone()[:]
             except:
                 self.conn.rollback()
@@ -181,7 +179,9 @@ class Clients:
 
             try:
                 cur.execute(
-                    "SELECT id, imie, nazwisko, telefon, firma, rabat FROM clients WHERE imie LIKE %s AND nazwisko LIKE %s AND CAST(telefon AS text) LIKE %s;", args)
+                    "SELECT id, imie, nazwisko, telefon, firma, rabat FROM clients WHERE imie "
+                    "LIKE %s AND nazwisko LIKE %s AND CAST(telefon AS text) LIKE %s;",
+                    args)
                 wyn = cur.fetchall()[:]
             except:
                 self.conn.rollback()

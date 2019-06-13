@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
-from gi import require_version
+import gi
 
-require_version("Gtk", "3.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
-from decimal import Decimal
 from .popup import PopUp
 
 
-class Zlecenia:
-    """Klasa odpowiadająca za działanie okna interakcji sprzedawcy z tabelą zleceń."""
+class Orders:
 
     def __init__(self, conndb):
-        """Tworzy nowe okno z połączeniem z bazą danych."""
         self.conn = conndb
 
         zlecenia_builder = Gtk.Builder()
-        zlecenia_builder.add_from_file("glade/zlecenia.glade")
+        zlecenia_builder.add_from_file("glade/orders.glade")
 
         self.zlecenia_window = zlecenia_builder.get_object("zlecenia_window")
 
@@ -68,18 +65,20 @@ class Zlecenia:
 
     def zlecenia_button1_5b_clicked_cb(self, button):
         """Reaguje na kliknięcie przycisku dodania nowego zlecenia."""
-        nr_rej = self.zlecenia_entry1_1ba.get_text() + ":" + self.zlecenia_entry1_1bc.get_text()  # SQL text
+        nr_rej = self.zlecenia_entry1_1ba.get_text() + ":" + self.zlecenia_entry1_1bc.get_text()
+        # SQL text
         faktura = self.zlecenia_comboboxtext1_2b.get_active_text()  # SQL boolean
         kli_id = self.zlecenia_comboboxtext1_3b.get_active_text()  # SQL integer
         sam_model = self.zlecenia_comboboxtext1_4b.get_active_text()  # SQL text
 
         faktura = True if faktura == "TAK" else False
         args = [nr_rej, faktura, int(kli_id), sam_model]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute(
-                "INSERT INTO zlecenia(nr_rej, faktura, kli_id, sam_model) VALUES(%s, %s, %s, %s);", args)
+                "INSERT INTO zlecenia(nr_rej, faktura, kli_id, sam_model) VALUES(%s, %s, %s, %s);",
+                args)
             cur.execute("SELECT max(id) FROM zlecenia;")
             wyn = cur.fetchone()[0]
         except:
@@ -102,9 +101,9 @@ class Zlecenia:
         nazwa = self.zlecenia_comboboxtext2_2b.get_active_text()  # SQL text
 
         args = [int(ident), nazwa]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("INSERT INTO zle_usl(zle_id, usl_nazwa) VALUES(%s, %s);", args)
         except:
             self.conn.rollback()
@@ -128,11 +127,13 @@ class Zlecenia:
         ident = self.zlecenia_comboboxtext3_1b.get_active_text()  # SQL integer
 
         args = [int(ident)]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute(
-                "SELECT id, data_zlec, data_real, nr_rej, faktura, kli_id, sam_model, koszt FROM zlecenia WHERE id = %s", args)
+                "SELECT id, data_zlec, data_real, nr_rej, faktura, kli_id, sam_model, koszt FROM "
+                "zlecenia WHERE id = %s",
+                args)
             wyn = cur.fetchone()[:]
         except:
             self.conn.rollback()

@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
-from gi import require_version
+import gi
 
-require_version("Gtk", "3.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
 from .popup import PopUp
 
 
-class Mechanik:
-    """Klasa odpowiadająca za działanie okna interakcji mechanika z bazą danych."""
-
+class Mechanic:
     def __init__(self, conndb):
-        """Tworzy nowe okno z połączeniem z bazą danych."""
         self.conn = conndb
 
         mechanik_builder = Gtk.Builder()
-        mechanik_builder.add_from_file("glade/mechanik.glade")
+        mechanik_builder.add_from_file("glade/mechanic.glade")
 
         self.mechanik_window = mechanik_builder.get_object("mechanik_window")
 
@@ -75,9 +72,9 @@ class Mechanik:
         ident = self.mechanik_comboboxtext1_1b.get_active_text()  # SQL integer
 
         args = [int(ident)]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("UPDATE TABLE zlecenia SET data_real = now() WHERE id = %s", args)
         except:
             self.conn.rollback()
@@ -96,9 +93,9 @@ class Mechanik:
         nazwa = self.mechanik_comboboxtext2_2b.get_active_text()  # SQL text
 
         args = [int(ident), nazwa]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("INSERT INTO czeusl(cze_id, usl_nazwa) VALUES(%s, %s);", args)
         except:
             self.conn.rollback()
@@ -118,9 +115,9 @@ class Mechanik:
         model = self.mechanik_comboboxtext2_3b.get_active_text()  # SQL text
 
         args = [int(ident), model]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("INSERT INTO czesam(cze_id, sam_model) VALUES(%s, %s);", args)
         except:
             self.conn.rollback()
@@ -139,9 +136,9 @@ class Mechanik:
         ident = self.mechanik_comboboxtext3_1b.get_active_text()  # SQL integer
 
         args = [int(ident)]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("SELECT ilosc FROM carparts WHERE id = %s", args)
             wyn = cur.fetchone()[0]
         except:
@@ -163,9 +160,9 @@ class Mechanik:
         ilosc = self.mechanik_entry3_2b.get_text()  # SQL integer
 
         args = [int(ilosc), int(ident)]
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("UPDATE TABLE carparts SET ilosc = ilosc-%s WHERE id = %s", args)
         except:
             self.conn.rollback()

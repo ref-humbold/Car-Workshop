@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-from gi import require_version
+import gi
 
-require_version("Gtk", "3.0")
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
+
+from decimal import Decimal, getcontext
 from .popup import PopUp
 
 
-class Uslugi:
-    """Klasa odpowiadająca za działanie okna interakcji sprzedawcy z tabelą usług."""
-
+class Commissions:
     def __init__(self, conndb):
-        """Tworzy nowe okno z połączeniem z bazą danych."""
         self.conn = conndb
 
         uslugi_builder = Gtk.Builder()
-        uslugi_builder.add_from_file("glade/uslugi.glade")
+        uslugi_builder.add_from_file("glade/commissions.glade")
 
         self.uslugi_window = uslugi_builder.get_object("uslugi_window")
 
@@ -55,8 +54,9 @@ class Uslugi:
         nazwa = self.uslugi_comboboxtext1_1b.get_active_text()  # SQL text
         args = [nazwa]
 
+        cur = self.conn.cursor()
+
         try:
-            cur = self.conn.cursor()
             cur.execute("SELECT cena FROM uslugi WHERE nazwa = %s;", args)
             wyn = cur.fetchone()[0]
         except:
@@ -76,10 +76,11 @@ class Uslugi:
         nazwa = self.uslugi_entry2_1b.get_text()  # SQL text
         cena = self.uslugi_entry2_2b.get_text()  # SQL numeric
         args = [nazwa, Decimal(cena)]
+
         getcontext().prec = 2
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("INSERT INTO uslugi(nazwa, cena) VALUES(%s, %s);", args)
         except:
             self.conn.rollback()
@@ -99,10 +100,11 @@ class Uslugi:
         nazwa = self.uslugi_comboboxtext3_1b.get_active_text()  # SQL text
         nowa_cena = self.uslugi_entry3_2b.get_text()  # SQL numeric
         args = [Decimal(nowa_cena), nazwa]
+
         getcontext().prec = 2
+        cur = self.conn.cursor()
 
         try:
-            cur = self.conn.cursor()
             cur.execute("UPDATE TABLE uslugi SET cena = %s WHERE nazwa = %s;", args)
         except:
             self.conn.rollback()
