@@ -1,7 +1,7 @@
-# Python
-**/__pycache__
-**/*.pyc
+# [ Python ]
+# Python output
+__pycache__/
+*.pyc
 
 # PyCharm
 .idea
-*.iml
