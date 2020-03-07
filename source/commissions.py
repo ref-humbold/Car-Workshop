@@ -61,13 +61,10 @@ class Commissions:
             wyn = cur.fetchone()[0]
         except:
             self.conn.rollback()
-            cur.close()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("CENA USLUGI " + nazwa + " WYNOSI " + str(wyn) + " zł.")
-            popup_window.show()
+            PopUp("CENA USLUGI " + nazwa + " WYNOSI " + str(wyn) + " zł.").show()
         finally:
             cur.close()
 
@@ -84,14 +81,12 @@ class Commissions:
             cur.execute("INSERT INTO uslugi(nazwa, cena) VALUES(%s, %s);", args)
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
             self.uslugi_comboboxtext1_1b.append_text(nazwa)
             self.uslugi_comboboxtext3_1b.append_text(nazwa)
-            popup_window = PopUp("USŁUGA " + nazwa + " ZOSTAŁA POMYŚLNIE DODANA.")
-            popup_window.show()
+            PopUp("USŁUGA " + nazwa + " ZOSTAŁA POMYŚLNIE DODANA.").show()
         finally:
             cur.close()
 
@@ -108,11 +103,9 @@ class Commissions:
             cur.execute("UPDATE TABLE uslugi SET cena = %s WHERE nazwa = %s;", args)
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("CENA USŁUGI " + nazwa + " ZOSTAŁA POMYŚNIE ZMIENIONA.")
-            popup_window.show()
+            PopUp("CENA USŁUGI " + nazwa + " ZOSTAŁA POMYŚNIE ZMIENIONA.").show()
         finally:
             cur.close()

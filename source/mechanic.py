@@ -78,12 +78,10 @@ class Mechanic:
             cur.execute("UPDATE TABLE zlecenia SET data_real = now() WHERE id = %s", args)
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("ZLECENIE " + str(ident) + " ZOSTAŁO POMYŚLNIE ZAKOŃCZONE.")
-            popup_window.show()
+            PopUp("ZLECENIE " + str(ident) + " ZOSTAŁO POMYŚLNIE ZAKOŃCZONE.").show()
         finally:
             cur.close()
 
@@ -100,12 +98,10 @@ class Mechanic:
         except:
             self.conn.rollback()
             cur.close()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("POMYŚLNIE PRZYPISANO CZĘŚĆ DO USŁUGI.")
-            popup_window.show()
+            PopUp("POMYŚLNIE PRZYPISANO CZĘŚĆ DO USŁUGI.").show()
         finally:
             cur.close()
 
@@ -122,12 +118,10 @@ class Mechanic:
         except:
             self.conn.rollback()
             cur.close()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("POMYŚLNIE PRZYPISANO CZĘŚĆ DO MODELU SAMOCHODU.")
-            popup_window.show()
+            PopUp("POMYŚLNIE PRZYPISANO CZĘŚĆ DO MODELU SAMOCHODU.").show()
         finally:
             cur.close()
 
@@ -144,13 +138,11 @@ class Mechanic:
         except:
             self.conn.rollback()
             cur.close()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("W MAGAZYNIE ZNAJDUJE SIĘ " + str(wyn) +
-                                 " CZĘŚCI NUMER " + str(ident) + ".")
-            popup_window.show()
+            PopUp("W MAGAZYNIE ZNAJDUJE SIĘ " + str(wyn) +
+                  " CZĘŚCI NUMER " + str(ident) + ".").show()
         finally:
             cur.close()
 
@@ -166,12 +158,10 @@ class Mechanic:
             cur.execute("UPDATE TABLE carparts SET ilosc = ilosc-%s WHERE id = %s", args)
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("POBRANO " + str(ilosc) +
-                                 " JEDNOSTEK CZĘŚCI NUMER " + str(ident) + ".")
-            popup_window.show()
+            PopUp("POBRANO " + str(ilosc) +
+                  " JEDNOSTEK CZĘŚCI NUMER " + str(ident) + ".").show()
         finally:
             cur.close()

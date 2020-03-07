@@ -79,8 +79,7 @@ class Warehouse:
             except:
                 self.conn.rollback()
                 cur.close()
-                popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-                popup_window.show()
+                PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
                 return False
 
         return True
@@ -110,14 +109,12 @@ class Warehouse:
             wyn = cur.fetchone()[0]
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
             self.magazynier_comboboxtext2_1b.append_text(str(wyn))
             self.magazynier_comboboxtext3_1b.append_text(str(wyn))
-            popup_window = PopUp("ZAMÓWIENIE ZOSTAŁO POMYŚLNIE WYSŁANE.\nID = " + str(wyn))
-            popup_window.show()
+            PopUp("ZAMÓWIENIE ZOSTAŁO POMYŚLNIE WYSŁANE.\nID = " + str(wyn)).show()
         finally:
             cur.close()
 
@@ -141,8 +138,8 @@ class Warehouse:
 
         self.conn.commit()
         cur.close()
-        popup_window = PopUp("ZAMÓWIENIE NUMER " + str(ident) + " ZOSTAŁO POMYŚLNIE ZMIENIONE.")
-        popup_window.show()
+        PopUp(
+            "ZAMÓWIENIE NUMER " + str(ident) + " ZOSTAŁO POMYŚLNIE ZMIENIONE.").show()
 
     def magazynier_button3_1c_clicked_cb(self, button):
         """Reaguje na kliknięcie przycisku odbioru zamówienia."""
@@ -155,11 +152,9 @@ class Warehouse:
             cur.execute("UPDATE TABLE zamowienia SET data_real = now() WHERE id = %s", args)
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
-            popup_window = PopUp("POMYŚLNIE ODEBRANO ZAMÓWIENIE NUMER " + str(ident) + ".")
-            popup_window.show()
+            PopUp("POMYŚLNIE ODEBRANO ZAMÓWIENIE NUMER " + str(ident) + ".").show()
         finally:
             cur.close()

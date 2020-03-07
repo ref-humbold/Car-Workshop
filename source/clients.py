@@ -75,8 +75,7 @@ class Clients:
             except:
                 self.conn.rollback()
                 cur.close()
-                popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-                popup_window.show()
+                PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
                 return False
 
         return True
@@ -104,14 +103,12 @@ class Clients:
         except:
             self.conn.rollback()
             cur.close()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
         else:
             self.conn.commit()
             self.clients_comboboxtext2_1b.append_text(str(wynid))
             self.clients_comboboxtext3_1b.append_text(str(wynid))
-            popup_window = PopUp("NOWY KLIENT ZOSTAŁ POMYŚLNIE DODANY.\nID = " + str(wynid))
-            popup_window.show()
+            PopUp("NOWY KLIENT ZOSTAŁ POMYŚLNIE DODANY.\nID = " + str(wynid)).show()
         finally:
             cur.close()
 
@@ -143,8 +140,8 @@ class Clients:
 
         self.conn.commit()
         cur.close()
-        popup_window = PopUp("DANE KLIENTA NUMER " + str(ident) + " ZOSTAŁY POMYŚLNIE ZMIENIONE.")
-        popup_window.show()
+        PopUp(
+            "DANE KLIENTA NUMER " + str(ident) + " ZOSTAŁY POMYŚLNIE ZMIENIONE.").show()
 
     def clients_button3_5b_clicked_cb(self, button):
         """Reaguje na kliknięcie przycisku wyszukania klienta."""
@@ -165,13 +162,11 @@ class Clients:
                 wyn = cur.fetchone()[:]
             except:
                 self.conn.rollback()
-                popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-                popup_window.show()
+                PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
                 return
             else:
                 self.conn.commit()
-                popup_window = PopUp(", ".join(map(str, wyn)))
-                popup_window.show()
+                PopUp(", ".join(map(str, wyn))).show()
             finally:
                 cur.close()
         else:
@@ -185,14 +180,12 @@ class Clients:
                 wyn = cur.fetchall()[:]
             except:
                 self.conn.rollback()
-                popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-                popup_window.show()
+                PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
                 return
             else:
                 self.conn.commit()
                 res = map(lambda x: ", ".join(map(str, x)), wyn)
                 out_str = "BRAK WYNIKÓW!" if wyn == [] else "\n".join(res)
-                popup_window = PopUp(out_str)
-                popup_window.show()
+                PopUp(out_str).show()
             finally:
                 cur.close()

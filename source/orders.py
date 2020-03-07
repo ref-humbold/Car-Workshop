@@ -83,15 +83,13 @@ class Orders:
             wyn = cur.fetchone()[0]
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
             return
         else:
             self.conn.commit()
             self.zlecenia_comboboxtext2_1b.append_text(str(wyn))
             self.zlecenia_comboboxtext3_1b.append_text(str(wyn))
-            popup_window = PopUp("ZLECENIE ZOSTAŁO POMYŚLNIE ZŁOŻONE.\nID = " + str(wyn))
-            popup_window.show()
+            PopUp("ZLECENIE ZOSTAŁO POMYŚLNIE ZŁOŻONE.\nID = " + str(wyn)).show()
         finally:
             cur.close()
 
@@ -107,20 +105,17 @@ class Orders:
             cur.execute("INSERT INTO zle_usl(zle_id, usl_nazwa) VALUES(%s, %s);", args)
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
             return
         else:
             self.conn.commit()
             self.zlecenia_comboboxtext2_1b.append_text(str(wyn))
             self.zlecenia_comboboxtext3_1b.append_text(str(wyn))
-            popup_window = PopUp("POMYŚLNIE DODANO USŁUGĘ DO ZLECENIA.")
-            popup_window.show()
+            PopUp("POMYŚLNIE DODANO USŁUGĘ DO ZLECENIA.").show()
         finally:
             cur.close()
 
-        popup_window = PopUp("ZLECENIE " + str(ident) + " ZOSTAŁO POMYŚLNIE ZMIENIONE.")
-        popup_window.show()
+        PopUp("ZLECENIE " + str(ident) + " ZOSTAŁO POMYŚLNIE ZMIENIONE.").show()
 
     def zlecenia_button3_1c_clicked_cb(self, button):
         """Reaguje na kliknięcie przycisku wyszukania zlecenia."""
@@ -137,12 +132,10 @@ class Orders:
             wyn = cur.fetchone()[:]
         except:
             self.conn.rollback()
-            popup_window = PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.")
-            popup_window.show()
+            PopUp("WYSTĄPIŁ BŁĄD WEWNĘTRZNY BAZY. PRZERWANO.").show()
             return
         else:
             self.conn.commit()
-            popup_window = PopUp(", ".join(map(str, wyn)))
-            popup_window.show()
+            PopUp(", ".join(map(str, wyn))).show()
         finally:
             cur.close()

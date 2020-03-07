@@ -11,16 +11,15 @@ class PopUp:
         popup_builder = Gtk.Builder()
         popup_builder.add_from_file("glade/popup.glade")
 
-        self.__popup_window = popup_builder.get_object("popup_window")
-        self.__popup_label = popup_builder.get_object("popup_label")
-        self.__popup_button = popup_builder.get_object("popup_button")
+        self._popup_window = popup_builder.get_object("popup_window")
+        self._popup_label = popup_builder.get_object("popup_label")
+        self._popup_button = popup_builder.get_object("popup_button")
 
+        self._popup_label.set_label(text)
         popup_builder.connect_signals(self)
 
-        self.__popup_label.set_label(text)
-
     def show(self):
-        self.__popup_window.show()
+        self._popup_window.show()
 
     def popup_button_clicked_cb(self, button):
-        self.__popup_window.destroy()
+        self._popup_window.destroy()
